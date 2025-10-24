@@ -62,6 +62,37 @@ print( pokemon_df['Type 1'].value_counts() ) # frequency of value counts
 print( pokemon_df.loc[4] ) # gives you charmander
 
 # groupby function helps you isolate groups of entries
-print( pokemon_df.groupby('Type 1')[[ 'HP', 'Speed']].mean() ) 
-print( pokemon_df.groupby('Type 1').size().sort_values(ascending=False) ) # similar to .value_counts
+print( pokemon_df.groupby('Type 1')[[ 'HP', 'Speed']].mean() ) #print( pokemon_df.groupby('Type 1').size().sort_values(ascending=False) ) # similar to .value_counts
 
+# Create a new column with a sum of stat values
+pokemon_df['Total'] = pokemon_df[ ['HP', 'Attack', 'Defense', 'Speed'] ].sum(axis=1)
+print( pokemon_df['Total'] )
+
+# Use .groupby to identify average total stats by generation
+print( pokemon_df.groupby('Generation')['Total'].mean() )
+
+# Look at average total stats for legendary pokemon instead
+print( pokemon_df.groupby('Legendary')['Total'].mean() )
+
+# CONDITIONAL FILTERING
+# pulling entries (rows) from the df that meet a condition
+
+# Select pokemon with high HP values
+subset1 = pokemon_df[ (pokemon_df['HP'] > 100) ]
+print(subset1)
+
+# Select Psychich-type pokemon only
+subset2 = pokemon_df[ (pokemon_df['Type 1'] == 'Psychich') ]
+# creates a smaller dataframe from the original one
+
+# Can also use MULTIPLE conditions (use the & for AND, the | for OR)
+subset3 = subset2[ (subset2['Type 2'] == 'Fairy') & (subset2['Sp. Atk'] > 50) ]
+
+# Select pokemon whose name contains "Mega"
+subset4 = pokemon_df[ pokemon_df['Name'].str.contains('Mega') ]
+
+# Exclude Legendary pokemon
+subset5 = pokemon_df[ pokemon_df['Legendary'] == False ]
+# SHORTCUT with this ~ operator (NOT)
+subset6 = pokemon_df[ ~pokemon_df['Legendary'] ]
+print(subset6)
